@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f9d8fa63-b837-48a3-a157-0eb55e6050c4" name="Default Changelist" comment="" />
+    <list default="true" id="f9d8fa63-b837-48a3-a157-0eb55e6050c4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/facerec_ipcamera_knn_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/getimg.py" beforeDir="false" afterPath="$PROJECT_DIR$/getimg.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="firebase-python" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -14,7 +21,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1YTRJSibb7Px7uXh6KNAaYDdBUj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -102,13 +113,17 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582977054772" />
-    <state x="277" y="55" key="SettingsEditor" timestamp="1582975250666">
+    <state x="277" y="55" key="SettingsEditor" timestamp="1583496809552">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="277" y="55" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1582975250666" />
-    <state x="82" y="237" key="com.intellij.ide.util.TipDialog" timestamp="1582965781248">
+    <state x="277" y="55" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1583496809552" />
+    <state x="82" y="237" key="com.intellij.ide.util.TipDialog" timestamp="1584621978547">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="82" y="237" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1582965781248" />
+    <state x="82" y="237" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1584621978547" />
+    <state x="713" y="100" width="728" height="624" key="dock-window-1" timestamp="1584621994857">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="713" y="100" width="728" height="624" key="dock-window-1/0.0.1536.824@0.0.1536.824" timestamp="1584621994857" />
   </component>
 </project>
