@@ -235,7 +235,7 @@ if __name__ == "__main__":
     bucket = storage.bucket(app=sr_app)
     blob = bucket.blob("WhoRU_target/{}.jpg".format(username))
     img_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
-    urllib.request.urlretrieve(img_url, './knn_examples/train/{}.jpg'.format(username))
+    urllib.request.urlretrieve(img_url, './knn_examples/train/{}/{}.jpg'.format(username,username))
     print("save")
     ######################################################
     print("Training KNN classifier...")
