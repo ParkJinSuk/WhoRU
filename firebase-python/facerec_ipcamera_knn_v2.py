@@ -234,8 +234,11 @@ if __name__ == "__main__":
     ################### Call Image ######################
     bucket = storage.bucket(app=sr_app)
     blob = bucket.blob("WhoRU_target/{}.jpg".format(username))
+    user_path = "./knn_examples/train/{}".format(username)
+    if not os.path.isdir(user_path):
+        os.mkdir(user_path)
     img_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
-    urllib.request.urlretrieve(img_url, './knn_examples/train/{}/{}.jpg'.format(username,username))
+    urllib.request.urlretrieve(img_url, '{0}/{1}.jpg'.format(user_path, username))
     print("save")
     ######################################################
     print("Training KNN classifier...")
