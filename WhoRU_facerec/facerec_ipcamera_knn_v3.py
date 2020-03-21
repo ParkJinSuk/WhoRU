@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+'''
+2020.03.10
+firebase database에서 username을 불러온다.
+username과 일치하는 사진을 firebase storage로 부터 불러온 후
+face recognition을 진행한다.
+
+2020.03.21
+face recognition이 시작되는 시간을 불러온다.
+그 시간으로부터 2분이 지날동안 검사가 완료되지 않으면 재요청을 하고,
+그 시간 안에 검사가 진행되면 firebase database의 'approved' 값을 1로 바꾼다.
+(테스트 필요)
+'''
 """
 This is an example of using the k-nearest-neighbors (KNN) algorithm for face recognition.
 When should I use this example?
@@ -46,6 +59,8 @@ import urllib.request
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+
+import time
 
 ####### Global Variable ######
 cnt_face = 0
