@@ -72,7 +72,7 @@ cnt_face = 0
 db_url = 'https://whoru-ed991.firebaseio.com/'
 cred = credentials.Certificate("myKey.json")
 db_app = firebase_admin.initialize_app(cred, {'databaseURL': db_url})
-alldata = db.reference()
+alldata = db.reference('carlist')
 sr_buck = 'whoru-ed991.appspot.com'
 sr_app = firebase_admin.initialize_app(cred, {'storageBucket': sr_buck, }, name='storage')
 #########################################################
@@ -216,7 +216,7 @@ def show_prediction_labels_on_image(frame, predictions):
                 print("false")
 
             if cnt_face == 40:
-                alldata.child("carlist/{}".format(car_number)).update({'approved': '1'})
+                alldata.child("{}".format(car_number)).update({'approved': '1'})
                 print("Recognition successfully!")
                 # LED = Green
             elif cnt_face > 40:
@@ -244,17 +244,15 @@ def show_prediction_labels_on_image(frame, predictions):
 
 if __name__ == "__main__":
     ################# Get Car Number ####################
-    query = ref.order_by_child('Request').equal_to('1')
+    query = alldata.order_by_child('Request').equal_to('1')
     snapshot = query.get()
-    carlist = ref.child("carlist").get()
-    for carlist in snapshot:
-        print(carlist)
-        car_number = ref.child("{}/Request".format(carlist)).get()
-        print(car_number)
+    for alldata in snapshot:
+        # car_number = alldata.child("{}/Request".format(carlist)).get()
+        print(alldata)
     #####################################################
 
     ################### Call Image ######################
-    username = alldata.child("carlist/{}/username".format(car_name)).get()
+    username = alldata.child("{}/username".format(car_name)).get()
     bucket = storage.bucket(app=sr_app)
     blob = bucket.blob("WhoRU_target/{}.jpg".format(username))
     user_path = "./knn_examples/train/{}".format(username)
