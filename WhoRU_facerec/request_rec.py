@@ -21,12 +21,48 @@ cred = credentials.Certificate("myKey.json")
 db_app = firebase_admin.initialize_app(cred, {'databaseURL': db_url})
 ref = db.reference()
 
-while True:
-    input_state = GPIO.input(11)
-    if input_state is False:
-        ref.child("carlist/06수 8850").update({'Request': '1'})
-        GPIO.output(12, GPIO.HIGH)
-    else:
-        GPIO.output(12, GPIO.LOW)
+pin_servo_motor = 18 # GPIO.BCM 18
+#pin_servo_motor = 12 # GPIO.BOARD
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pin_servo_motor, GPIO.OUT)
 
-    time.sleep(0.5)
+p = GPIO.PWM(pin_servo_motor, 50)
+p.start(0)
+
+cnt = 0
+
+pwm = 0
+
+switch = 0
+
+try:
+    while True:
+        input_state = GPIO.input(11)
+        if input_state == 1:
+            if switch == 0:
+                switch = 1
+                ref.child("carlist/06수 8850").update({'Request': '1'})
+            else:
+                switch = 0
+                ref.child("carlist/06수 8850").update({'Request': '0'})
+
+        flag = ref.child("carlist/06수 8850/approved").get()
+        if flag == 1:
+            # led off
+            GPIO.output(12, GPIO.LOW)
+            # motor on
+            pwm = input()
+            pwm = int(pwm)
+            p.ChangeDutyCycle(pwm)
+            print("angle : {}".format(pwm))
+            time.sleep(0.5)
+        else: GPIO.output(12, GPIO.HIGH)
+
+        '''
+        pwm += 1
+        if pwm == 10:
+            pwm = 0
+        '''
+except KeyboardInterrupt:
+    p.stop()
+GPIO.cleanup()
