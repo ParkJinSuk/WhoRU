@@ -66,13 +66,18 @@ import time
 
 ####### Global Variable ######
 cnt_face = 0
+
+CARNUMBER = None
+USERNAME = None
 ###############################
 
 ################ firebase import name #####################
 db_url = 'https://whoru-ed991.firebaseio.com/'
 cred = credentials.Certificate("myKey.json")
 db_app = firebase_admin.initialize_app(cred, {'databaseURL': db_url})
-alldata = db.reference('carlist')
+#alldata = db.reference('carlist')
+alldata = db.reference()
+
 sr_buck = 'whoru-ed991.appspot.com'
 sr_app = firebase_admin.initialize_app(cred, {'storageBucket': sr_buck, }, name='storage')
 #########################################################
@@ -209,7 +214,7 @@ def show_prediction_labels_on_image(frame, predictions):
         ############### name compare ######################################
         if cnt_face < 40:
             # LED = Orange
-            if names == username:
+            if names == USERNAME:
                 print("true")
                 cnt_face += 1
             else:
@@ -243,33 +248,48 @@ def show_prediction_labels_on_image(frame, predictions):
 
 
 if __name__ == "__main__":
+    
     ################# Get Car Number ####################
-    query = alldata.order_by_child('Request').equal_to('1')
-    snapshot = query.get()
-    for alldata in snapshot:
-        # car_number = alldata.child("{}/Request".format(carlist)).get()
-        print(alldata)
-    #####################################################
-
+    print("####\tGet Car Number........\t####")
+    carlist = db.reference('carlist').get()
+    #print(carlist.items())
+    
+    for carNumber, val in carlist.items():
+        Request = db.reference('carlist').child('{}/request'.format(carNumber)).get()
+        if Request == 1:
+            CARNUMBER = carNumber
+            print("Request : {} \t carNumber : {}".format(Request, carNumber))
+            break
+        else:
+            pass
+    print("####\tGet Car Number Complete!!\t####")
+    
+    
     ################### Call Image ######################
-    username = alldata.child("{}/username".format(car_name)).get()
+    print("####\tGet User Image..........\t####")
+    USERNAME = db.reference('carlist').child('{}/username'.format(CARNUMBER)).get()
+    print("username : {}".format(USERNAME))
+    
     bucket = storage.bucket(app=sr_app)
-    blob = bucket.blob("WhoRU_target/{}.jpg".format(username))
-    user_path = "./knn_examples/train/{}".format(username)
+    blob = bucket.blob("WhoRU_target/{}.jpg".format(USERNAME))
+    user_path = "./knn_examples/train/{}".format(USERNAME)
     if not os.path.isdir(user_path):
         os.mkdir(user_path)
     img_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
-    urllib.request.urlretrieve(img_url, '{0}/{1}.jpg'.format(user_path, username))
-    print("save")
+    urllib.request.urlretrieve(img_url, '{0}/{1}.jpg'.format(user_path, USERNAME))
+    print("####\tGet User Image Comoplete!!\t####")
     ######################################################
-    print("Training KNN classifier...")
+    
+    
+    ######################################################
+    print("####\tTraining KNN classifier...\t####")
     classifier = train("knn_examples/train", model_save_path="trained_knn_model.clf", n_neighbors=2)
-    print("Training complete!")
+    print("####\tTraining complete!\t####")
     # process one frame in every 30 frames for speed
     process_this_frame = 29
-    print('Setting cameras up...')
+    print('####\tSetting cameras up...\t####')
     # multiple cameras can be used with the format url = 'http://username:password@camera_ip:port'
-    url = 'http://192.168.0.17:8081/'
+    url = 'http://172.30.1.56:8081/'
     cap = cv2.VideoCapture(url)
 
     while 1 > 0:
