@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 '''
 2020.03.21
-버튼이 눌리면 firebase database에 있는 'Request' 값을 1로 바꾸고,
-firebase database의 Request 값이 1인 차량 번호를 불러온다.
+버튼이 눌리면 firebase database에 있는 'request' 값을 1로 바꿈
+2020.03.22.
+'approved'값이 1이 되면 servo motor 제어
 '''
 
 import firebase_admin
@@ -30,23 +31,22 @@ p = GPIO.PWM(pin_servo_motor, 50)
 p.start(0)
 
 cnt = 0
-
 pwm = 0
-
 switch = 0
 
 try:
     while True:
         input_state = GPIO.input(11)
+        flag = ref.child("carlist/06수 8850/approved").get()
+        # REQUEST
         if input_state == 1:
             if switch == 0:
                 switch = 1
-                ref.child("carlist/06수 8850").update({'Request': '1'})
-            else:
+                ref.child("carlist/06수 8850").update({'request': '1'})
+            elif switch == 1 & flag == 0:
                 switch = 0
-                ref.child("carlist/06수 8850").update({'Request': '0'})
-
-        flag = ref.child("carlist/06수 8850/approved").get()
+                ref.child("carlist/06수 8850").update({'request': '0'})
+        # APPRROVED
         if flag == 1:
             # led off
             GPIO.output(12, GPIO.LOW)
@@ -65,4 +65,4 @@ try:
         '''
 except KeyboardInterrupt:
     p.stop()
-GPIO.cleanup()
+    GPIO.cleanup()
