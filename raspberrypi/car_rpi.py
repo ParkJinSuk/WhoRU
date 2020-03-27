@@ -12,20 +12,23 @@ from firebase_admin import db
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BOARD)
+pin_servo_motor = 18 # GPIO.BCM
+pin_switch = 21 # GPIO.BCM
+pin_led = 26 # GPIO.BCM
+
 # red_led = port 12
-GPIO.setup(12, GPIO.OUT)
-GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pin_led, GPIO.OUT)
+GPIO.setup(pin_switch, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+GPIO.setup(pin_servo_motor, GPIO.OUT)
 
 db_url = 'https://whoru-ed991.firebaseio.com/'
 cred = credentials.Certificate("myKey.json")
 db_app = firebase_admin.initialize_app(cred, {'databaseURL': db_url})
 ref = db.reference()
 
-pin_servo_motor = 18 # GPIO.BCM 18
 #pin_servo_motor = 12 # GPIO.BOARD
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(pin_servo_motor, GPIO.OUT)
 
 p = GPIO.PWM(pin_servo_motor, 50)
 p.start(0)
@@ -36,7 +39,7 @@ switch = 0
 
 try:
     while True:
-        input_state = GPIO.input(11)
+        input_state = GPIO.input(pin_switch)
         flag = ref.child("carlist/06수 8850/approved").get()
         # REQUEST
         if input_state == 1:
@@ -49,14 +52,14 @@ try:
         # APPRROVED
         if flag == 1:
             # led off
-            GPIO.output(12, GPIO.LOW)
+            GPIO.output(pin_led, GPIO.LOW)
             # motor on
             pwm = input()
             pwm = int(pwm)
             p.ChangeDutyCycle(pwm)
             print("angle : {}".format(pwm))
             time.sleep(0.5)
-        else: GPIO.output(12, GPIO.HIGH)
+        else: GPIO.output(pin_led, GPIO.HIGH)
 
         '''
         pwm += 1
