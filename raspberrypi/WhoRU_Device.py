@@ -90,11 +90,7 @@ try:
             GPIO.output(pin_led, GPIO.LOW)
             isrequest = False
             p.ChangeDutyCycle(1)
-        
-        
-        
-        
-        
+
         '''
         pwm += 1
         if pwm == 10:
