@@ -30,17 +30,36 @@ ref = db.reference()
 
 #pin_servo_motor = 12 # GPIO.BOARD
 
+#p = GPIO.PWM(pin_servo_motor, 50)
 p = GPIO.PWM(pin_servo_motor, 50)
+
 p.start(0)
 
 cnt = 0
 pwm = 0
 switch = 0
+input_state = 0
+input_state_pre = 0
+isrequest = False
+GPIO.output(pin_led, GPIO.LOW)
 
 try:
     while True:
+        input_state_pre = input_state
         input_state = GPIO.input(pin_switch)
+        
         flag = ref.child("carlist/06수 8850/approved").get()
+        # APPRROVED
+        if flag == '1':
+            print("flag 1")
+            # led off
+            GPIO.output(pin_led, GPIO.LOW)
+            # motor on
+            p.ChangeDutyCycle(10)
+            print("angle : {}".format(pwm))
+            time.sleep(0.5)
+        
+        '''
         # REQUEST
         if input_state == 1:
             if switch == 0:
@@ -49,18 +68,33 @@ try:
             elif switch == 1 & flag == 0:
                 switch = 0
                 ref.child("carlist/06수 8850").update({'request': '0'})
-        # APPRROVED
-        if flag == 1:
-            # led off
+        '''
+        
+        if (input_state != input_state_pre):
+            print("edge!")
+            if input_state == 0:
+                switch += 1
+            else:
+                pass
+        
+        if (switch % 2 == 1) and (isrequest == False):
+            print("request 1")
+            ref.child("carlist/06수 8850").update({'request': '1'})
+            GPIO.output(pin_led, GPIO.HIGH)
+            isrequest = True
+        if (switch % 2 == 0) and (isrequest == True):
+            print("request 0")
+            ref.child("carlist/06수 8850").update({'request': '0'})
+            ref.child("carlist/06수 8850").update({'approved': '0'})
+            
             GPIO.output(pin_led, GPIO.LOW)
-            # motor on
-            pwm = input()
-            pwm = int(pwm)
-            p.ChangeDutyCycle(pwm)
-            print("angle : {}".format(pwm))
-            time.sleep(0.5)
-        else: GPIO.output(pin_led, GPIO.HIGH)
-
+            isrequest = False
+            p.ChangeDutyCycle(1)
+        
+        
+        
+        
+        
         '''
         pwm += 1
         if pwm == 10:
