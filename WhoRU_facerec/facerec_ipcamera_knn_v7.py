@@ -194,8 +194,7 @@ def show_prediction_labels_on_image(frame, predictions):
     """
     pil_image = Image.fromarray(frame)
     draw = ImageDraw.Draw(pil_image)
-    # 시작시간 기록
-    #start_time = time.time()
+    
     
     for name, (top, right, bottom, left) in predictions:
         # enlarge the predictions for the full sized image.
@@ -231,6 +230,7 @@ def show_prediction_labels_on_image(frame, predictions):
                 exit(0)
             now = time.time()
             if now > start_time + 15:
+                db.reference('carlist').child("{}".format(CARNUMBER)).update({'request': '0'})
                 print("Disapproved. Try Again.")
         #################################################################
 
@@ -288,7 +288,7 @@ if __name__ == "__main__":
                     # multiple cameras can be used with the format url = 'http://username:password@camera_ip:port'
                     url = 'http://192.168.43.78:8081/'
                     cap = cv2.VideoCapture(url)
-                    
+                    # 시작 시간 기록
                     start_time = time.time()
                     while 1 > 0:
                         ret, frame = cap.read()
