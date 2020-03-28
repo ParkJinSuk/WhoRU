@@ -39,7 +39,7 @@ def print_result(filename, name, distance, show_distance=False):
         print("{},{}".format(filename, name))
 
 
-def test_image(image_to_check, known_names, known_face_encodings, tolerance=0.45, show_distance=False):
+def test_image(image_to_check, known_names, known_face_encodings, tolerance=0.4, show_distance=False):
     unknown_image = face_recognition.load_image_file(image_to_check)
 
     # Scale down image if it's giant so things run a little faster
@@ -96,7 +96,7 @@ def process_images_in_process_pool(images_to_check, known_names, known_face_enco
 @click.argument('known_people_folder')
 @click.argument('image_to_check')
 @click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means "use all in system"')
-@click.option('--tolerance', default=0.45, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
+@click.option('--tolerance', default=0.4, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
 @click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
 def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
     known_names, known_face_encodings = scan_known_people(known_people_folder)

@@ -1,4 +1,3 @@
-@ -0,0 +1,317 @@
 # -*- coding: utf-8 -*-
 '''
 2020.03.10
@@ -196,8 +195,8 @@ def show_prediction_labels_on_image(frame, predictions):
     pil_image = Image.fromarray(frame)
     draw = ImageDraw.Draw(pil_image)
     # 시작시간 기록
-    start_time = time.time()
-
+    #start_time = time.time()
+    
     for name, (top, right, bottom, left) in predictions:
         # enlarge the predictions for the full sized image.
         top *= 2
@@ -211,7 +210,6 @@ def show_prediction_labels_on_image(frame, predictions):
         # when using the default bitmap font
         name = name.encode("UTF-8")
         names = name.decode()
-
         ############### name compare ######################################
         if cnt_face < 40:
             # LED = Orange
@@ -220,9 +218,10 @@ def show_prediction_labels_on_image(frame, predictions):
                 cnt_face += 1
             else:
                 print("false")
+                cnt_face = 0
 
             if cnt_face == 40:
-                alldata.child("{}".format(CARNUMBER)).update({'approved': '1'})
+                db.reference('carlist').child("{}".format(CARNUMBER)).update({'approved': '1'})
                 print("Recognition successfully!")
                 # LED = Green
             elif cnt_face > 40:
@@ -231,7 +230,7 @@ def show_prediction_labels_on_image(frame, predictions):
                 # LED = OFF
                 exit(0)
             now = time.time()
-            if now > start_time + 30:
+            if now > start_time + 15:
                 print("Disapproved. Try Again.")
         #################################################################
 
@@ -287,9 +286,10 @@ if __name__ == "__main__":
                     process_this_frame = 29
                     print('####\tSetting cameras up...\t####')
                     # multiple cameras can be used with the format url = 'http://username:password@camera_ip:port'
-                    url = 'http://172.30.1.56:8081/'
+                    url = 'http://192.168.43.78:8081/'
                     cap = cv2.VideoCapture(url)
-
+                    
+                    start_time = time.time()
                     while 1 > 0:
                         ret, frame = cap.read()
                         if ret:
